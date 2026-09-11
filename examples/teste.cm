@@ -1,0 +1,12 @@
+int soma(int a, int b) {
+    return a + b;
+}
+
+int idade = 20;
+bool maior = idade >= 18;
+
+if (maior) {
+    print("Maior de idade");
+} else {
+    print("Menor de idade");
+}
