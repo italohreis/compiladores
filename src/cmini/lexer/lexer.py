@@ -70,6 +70,7 @@ class LexicalAnalyzer:
 
     def analyze(self, code):
         tokens = []
+        linha = 1
 
         while code:
             match = None
@@ -78,12 +79,16 @@ class LexicalAnalyzer:
                 match = regex.match(code)
 
                 if match:
+                    valor = match.group(0)
+
                     if token_type:
-                        tokens.append(Token(token_type, match.group(0)))
+                        tokens.append(Token(token_type, valor, linha))
+
+                    linha += valor.count('\n')
                     break
 
             if not match:
-                raise SyntaxError(f"Token inválido: {code[0]}")
+                raise SyntaxError(f"Token inválido na linha {linha}: {code[0]}")
 
             code = code[match.end():]
 
