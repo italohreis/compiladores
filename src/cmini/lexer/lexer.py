@@ -100,7 +100,7 @@ def read_code_from_file(file_path):
         return file.read()
 
 
-file_path = 'examples/teste.cm' 
+file_path = '../../../examples/teste.cm' 
 
 code = read_code_from_file(file_path)
 
