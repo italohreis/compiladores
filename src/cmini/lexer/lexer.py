@@ -70,20 +70,47 @@ class LexicalAnalyzer:
 
     def analyze(self, code):
         tokens = []
+        linha = 1
 
         while code:
             match = None
 
             for regex, token_type in self.compiled_patterns:
                 match = regex.match(code)
+                # faz
 
                 if match:
+                    valor = match.group(0)
+
+                    if token_type == 'NUMERO' and match.end() < len(code):
+                        proximo_caractere = code[match.end()]
+
+                        if proximo_caractere.isascii() and (
+                            proximo_caractere.isalpha() or proximo_caractere == '_'
+                        ):
+                            fim_identificador = match.end() + 1
+                            while fim_identificador < len(code):
+                                caractere = code[fim_identificador]
+                                if not (
+                                    caractere.isascii()
+                                    and (caractere.isalnum() or caractere == '_')
+                                ):
+                                    break
+                                fim_identificador += 1
+
+                            raise SyntaxError(
+                                f"Identificador inválido na linha {linha}: "
+                                f"{code[:fim_identificador]}"
+                            )
+
                     if token_type:
-                        tokens.append(Token(token_type, match.group(0)))
+                        tokens.append(Token(token_type, valor, linha))
+
+                    linha += valor.count('\n')
                     break
 
             if not match:
-                raise SyntaxError(f"Token inválido: {code[0]}")
+                raise SyntaxError(f"Token inválido na linha {linha}: {code[0]}")
 
             code = code[match.end():]
 
@@ -95,7 +122,7 @@ def read_code_from_file(file_path):
         return file.read()
 
 
-file_path = 'examples/teste.cm' 
+file_path = '../../../examples/teste.cm'
 
 code = read_code_from_file(file_path)
 
