@@ -1,0 +1,9 @@
+int funcao_teste() {
+    print("teste");
+}
+
+int x = 10;
+
+funcao_teste();
+
+x = x + 1;

@@ -1,5 +1,5 @@
 import re
-from token import Token
+from .token import Token
 
 class LexicalAnalyzer:
     def __init__(self):
@@ -77,7 +77,6 @@ class LexicalAnalyzer:
 
             for regex, token_type in self.compiled_patterns:
                 match = regex.match(code)
-                # faz
 
                 if match:
                     valor = match.group(0)
@@ -116,18 +115,3 @@ class LexicalAnalyzer:
 
         return tokens
 
-
-def read_code_from_file(file_path):
-    with open(file_path, 'r', encoding='utf-8') as file:
-        return file.read()
-
-
-file_path = '../../../examples/teste.cm'
-
-code = read_code_from_file(file_path)
-
-analyzer = LexicalAnalyzer()
-tokens = analyzer.analyze(code)
-
-for token in tokens:
-    print(token)
