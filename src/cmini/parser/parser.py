@@ -1,9 +1,14 @@
-from ..ast import (
-    Programa, Funcao, Declaracao, Parametro, Atribuicao,
-    OperacaoBinaria, OperacaoUnaria, Numero, Booleano, String, Identificador, ChamadaFuncao)
+from ..ast.nodes import (
+    Programa, Declaracao, Funcao, Parametro, Bloco, Atribuicao,
+    If, While, For, Scan, Print, Return, Numero, Booleano,
+    String, Identificador, OperacaoBinaria, OperacaoUnaria,
+    ChamadaFuncao
+)
+
 
 class ParserError(Exception):
     pass
+
 
 class Parser:
     def __init__(self, tokens):
@@ -17,10 +22,8 @@ class Parser:
 
     def advance(self):
         token = self.current()
-
         if token is not None:
             self.pos += 1
-
         return token
 
     def check(self, tipo):
@@ -31,7 +34,6 @@ class Parser:
         if self.check(tipo):
             self.advance()
             return True
-
         return False
 
     def expect(self, tipo):
@@ -39,16 +41,19 @@ class Parser:
 
         if token is None:
             raise ParserError(
-                f"Esperado {tipo}, mas o código terminou."
+                f"Erro sintático: esperado {tipo}, mas o código terminou."
             )
 
         if token.tipo != tipo:
             raise ParserError(
                 f"Erro sintático na linha {token.linha}: "
-                f"esperado {tipo}, encontrado {token.tipo} ('{token.valor}')."
+                f"esperado {tipo}, encontrado "
+                f"{token.tipo} ('{token.valor}')."
             )
 
         return self.advance()
+
+    # Programa e elementos globais
 
     def parse(self):
         elementos = []
@@ -58,37 +63,32 @@ class Parser:
 
         return Programa(elementos)
 
-    # <elemento> ::= <funcao> | <comando>
     def elemento(self):
         if self.check("INT") or self.check("BOOL"):
             tipo = self.tipo()
-            identificador = self.expect("IDENTIFICADOR")
+            nome = self.expect("IDENTIFICADOR")
 
             if self.check("ABRE_PARENTESES"):
-                return self.funcao_restante(tipo, identificador)
+                return self.funcao_restante(tipo, nome)
 
-            return self.declaracao_restante(tipo, identificador)
+            return self.declaracao_restante(tipo, nome)
 
         return self.comando()
 
-    # Parte final de:
-    # <funcao> ::= <tipo> <identificador> "(" <parametros_opt> ")" <bloco>
-    def funcao_restante(self, tipo, identificador):
-        self.expect("ABRE_PARENTESES")
-        parametros = self.parametros()
-        self.expect("FECHA_PARENTESES")
+    def tipo(self):
+        if self.match("INT"):
+            return "int"
 
-        corpo = self.bloco()
+        if self.match("BOOL"):
+            return "bool"
 
-        return Funcao(
-            tipo,
-            identificador.valor,
-            parametros,
-            corpo
+        token = self.current()
+        linha = token.linha if token else "desconhecida"
+
+        raise ParserError(
+            f"Erro sintático na linha {linha}: tipo esperado."
         )
 
-    # Parte final de:
-    # <declaracao> ::= <tipo> <identificador> <inicializacao_opt> ";"
     def declaracao_restante(self, tipo, identificador):
         inicializacao = None
 
@@ -99,21 +99,21 @@ class Parser:
 
         return Declaracao(tipo, identificador.valor, inicializacao)
 
-    # <tipo> ::= int | bool
-    def tipo(self):
-        if self.check("INT"):
-            self.advance()
-            return "int"
+    # Funções e parâmetros
 
-        if self.check("BOOL"):
-            self.advance()
-            return "bool"
+    def funcao_restante(self, tipo, identificador):
+        self.expect("ABRE_PARENTESES")
+        parametros = self.parametros()
+        self.expect("FECHA_PARENTESES")
+        corpo = self.bloco()
 
-        token = self.current()
-        raise ParserError(
-            f"Erro sintático na linha {token.linha}: tipo esperado."
-    )
-    # <parametros_opt> ::= <parametros> | ε
+        return Funcao(
+            tipo,
+            identificador.valor,
+            parametros,
+            corpo
+        )
+
     def parametros(self):
         parametros = []
 
@@ -131,18 +131,13 @@ class Parser:
 
         return parametros
 
-    # <comando> ::= declaração | atribuição | seleção |
-    #               repetição | entrada | saída | retorno
+    # Comandos
+
     def comando(self):
         if self.check("INT") or self.check("BOOL"):
-            self.tipo()
-            self.expect("IDENTIFICADOR")
-
-            if self.match("ATRIBUICAO"):
-                self.expressao()
-
-            self.expect("PONTO_VIRGULA")
-            return
+            tipo = self.tipo()
+            nome = self.expect("IDENTIFICADOR")
+            return self.declaracao_restante(tipo, nome)
 
         if self.check("IDENTIFICADOR"):
             nome = self.advance()
@@ -164,24 +159,19 @@ class Parser:
             )
 
         if self.check("IF"):
-            self.selecao()
-            return
+            return self.selecao()
 
         if self.check("WHILE") or self.check("FOR"):
-            self.repeticao()
-            return
+            return self.repeticao()
 
         if self.check("SCAN"):
-            self.entrada()
-            return
+            return self.entrada()
 
         if self.check("PRINT"):
-            self.saida()
-            return
+            return self.saida()
 
         if self.check("RETURN"):
-            self.retorno()
-            return
+            return self.retorno()
 
         token = self.current()
 
@@ -193,78 +183,89 @@ class Parser:
 
         raise ParserError("Fim inesperado do código.")
 
-    # <selecao> ::= if "(" <expressao> ")" <bloco>
-    #              | if "(" <expressao> ")" <bloco> else <bloco>
     def selecao(self):
         self.expect("IF")
         self.expect("ABRE_PARENTESES")
-        self.expressao()
+        condicao = self.expressao()
         self.expect("FECHA_PARENTESES")
-        self.bloco()
+
+        bloco_if = self.bloco()
+        bloco_else = None
 
         if self.match("ELSE"):
-            self.bloco()
+            bloco_else = self.bloco()
 
-    # <repeticao> ::= <while> | <for>
+        return If(condicao, bloco_if, bloco_else)
+
     def repeticao(self):
         if self.match("WHILE"):
             self.expect("ABRE_PARENTESES")
-            self.expressao()
+            condicao = self.expressao()
             self.expect("FECHA_PARENTESES")
-            self.bloco()
-            return
+            corpo = self.bloco()
+
+            return While(condicao, corpo)
 
         self.expect("FOR")
         self.expect("ABRE_PARENTESES")
 
-        # inicialização do for
-        self.expect("IDENTIFICADOR")
-        self.expect("ATRIBUICAO")
-        self.expressao()
+        # Inicialização: identificador = expressão
+        inicializacao = self.atribuicao_for()
         self.expect("PONTO_VIRGULA")
 
-        # condição
-        self.expressao()
+        # Condição do laço
+        condicao = self.expressao()
         self.expect("PONTO_VIRGULA")
 
-        # incremento
-        self.expect("IDENTIFICADOR")
-        self.expect("ATRIBUICAO")
-        self.expressao()
-
+        # Incremento: identificador = expressão
+        incremento = self.atribuicao_for()
         self.expect("FECHA_PARENTESES")
-        self.bloco()
 
-    # <entrada> ::= scan "(" <identificador> ")" ";"
+        corpo = self.bloco()
+
+        return For(inicializacao, condicao, incremento, corpo)
+
+    def atribuicao_for(self):
+        nome = self.expect("IDENTIFICADOR")
+        self.expect("ATRIBUICAO")
+        expressao = self.expressao()
+
+        return Atribuicao(nome.valor, expressao)
+
     def entrada(self):
         self.expect("SCAN")
         self.expect("ABRE_PARENTESES")
-        self.expect("IDENTIFICADOR")
+        nome = self.expect("IDENTIFICADOR")
         self.expect("FECHA_PARENTESES")
         self.expect("PONTO_VIRGULA")
 
-    # <saida> ::= print "(" <expressao_ou_string> ")" ";"
+        return Scan(nome.valor)
+
     def saida(self):
         self.expect("PRINT")
         self.expect("ABRE_PARENTESES")
 
         if self.check("STRING"):
-            self.advance()
+            token = self.advance()
+            valor = String(token.valor[1:-1])
         else:
-            self.expressao()
+            valor = self.expressao()
 
         self.expect("FECHA_PARENTESES")
         self.expect("PONTO_VIRGULA")
 
-    # <retorno> ::= return <expressao> ";"
+        return Print(valor)
+
     def retorno(self):
         self.expect("RETURN")
-        self.expressao()
+        expressao = self.expressao()
         self.expect("PONTO_VIRGULA")
 
-    # <bloco> ::= "{" <comandos> "}"
+        return Return(expressao)
+
     def bloco(self):
         self.expect("ABRE_CHAVES")
+        comandos = []
 
         if self.check("FECHA_CHAVES"):
             token = self.current()
@@ -275,63 +276,74 @@ class Parser:
 
         while not self.check("FECHA_CHAVES"):
             if self.current() is None:
-                raise ParserError("Bloco não foi fechado com '}'.")
+                raise ParserError(
+                    "Erro sintático: bloco não foi fechado com '}'."
+                )
 
-            self.comando()
+            comandos.append(self.comando())
 
         self.expect("FECHA_CHAVES")
 
-    # <expressao> ::= <or>
-    def expressao(self):
-        self.or_expr()
+        return Bloco(comandos)
 
-    # <or> ::= <and> ("||" <and>)*
+    # Expressões: precedência do menor para o maior nível
+
+    def expressao(self):
+        return self.or_expr()
+
     def or_expr(self):
         esquerda = self.and_expr()
 
         while self.match("OR"):
             direita = self.and_expr()
-            esquerda = OperacaoBinaria(esquerda, "||", direita)
+            esquerda = OperacaoBinaria(
+                esquerda, "||", direita
+            )
 
         return esquerda
 
-    # <and> ::= <relacional> ("&&" <relacional>)*
     def and_expr(self):
         esquerda = self.relacional()
 
         while self.match("AND"):
             direita = self.relacional()
-            esquerda = OperacaoBinaria(esquerda, "&&", direita)
+            esquerda = OperacaoBinaria(
+                esquerda, "&&", direita
+            )
 
         return esquerda
 
-    # <relacional> ::= <aditiva> [operador_relacional <aditiva>]
     def relacional(self):
-        self.aditiva()
+        esquerda = self.aditiva()
 
-        if (
-            self.check("IGUAL_IGUAL")
-            or self.check("DIFERENTE")
-            or self.check("MENOR")
-            or self.check("MENOR_IGUAL")
-            or self.check("MAIOR")
-            or self.check("MAIOR_IGUAL")
-        ):
-            self.advance()
-            self.aditiva()
+        operadores = {
+            "IGUAL_IGUAL", "DIFERENTE", "MENOR",
+            "MENOR_IGUAL", "MAIOR", "MAIOR_IGUAL"
+        }
 
-    # <aditiva> ::= <multiplicativa> (("+" | "-") <multiplicativa>)*
+        if self.current() and self.current().tipo in operadores:
+            operador = self.advance()
+            direita = self.aditiva()
+
+            esquerda = OperacaoBinaria(
+                esquerda, operador.valor, direita
+            )
+
+        return esquerda
+
     def aditiva(self):
         esquerda = self.multiplicativa()
 
         while self.check("MAIS") or self.check("MENOS"):
             operador = self.advance()
             direita = self.multiplicativa()
-            esquerda = OperacaoBinaria(esquerda, operador.valor, direita)
+
+            esquerda = OperacaoBinaria(
+                esquerda, operador.valor, direita
+            )
 
         return esquerda
 
-    # <multiplicativa> ::= <fator> (("*" | "/" | "%") <fator>)*
     def multiplicativa(self):
         esquerda = self.fator()
 
@@ -342,24 +354,19 @@ class Parser:
         ):
             operador = self.advance()
             direita = self.fator()
-            esquerda = OperacaoBinaria(esquerda, operador.valor, direita)
 
+            esquerda = OperacaoBinaria(
+                esquerda, operador.valor, direita
+            )
 
-    # <fator> ::= identificador
-    #           | chamada
-    #           | número
-    #           | true
-    #           | false
-    #           | "(" <expressao> ")"
-    #           | "!" <fator>
+        return esquerda
+
     def fator(self):
         if self.match("NOT"):
-            operando = self.fator()
-            return OperacaoUnaria("!", operando)
+            return OperacaoUnaria("!", self.fator())
 
         if self.check("NUMERO"):
-            token = self.advance()
-            return Numero(int(token.valor))
+            return Numero(int(self.advance().valor))
 
         if self.check("TRUE"):
             self.advance()
@@ -369,19 +376,16 @@ class Parser:
             self.advance()
             return Booleano(False)
 
-        if self.check("STRING"):
-            token = self.advance()
-            return String(token.valor[1:-1])
-
         if self.check("IDENTIFICADOR"):
-            token = self.advance()
+            nome = self.advance()
 
             if self.match("ABRE_PARENTESES"):
                 argumentos = self.argumentos()
                 self.expect("FECHA_PARENTESES")
-                return ChamadaFuncao(token.valor, argumentos)
 
-            return Identificador(token.valor)
+                return ChamadaFuncao(nome.valor, argumentos)
+
+            return Identificador(nome.valor)
 
         if self.match("ABRE_PARENTESES"):
             expressao = self.expressao()
@@ -396,14 +400,19 @@ class Parser:
                 f"expressão inesperada '{token.valor}'."
             )
 
-        raise ParserError("Fim inesperado durante expressão.")
+        raise ParserError(
+            "Erro sintático: fim inesperado durante expressão."
+        )
 
-    # <argumentos_opt> ::= <argumentos> | ε
     def argumentos(self):
-        if self.check("FECHA_PARENTESES"):
-            return
+        argumentos = []
 
-        self.expressao()
+        if self.check("FECHA_PARENTESES"):
+            return argumentos
+
+        argumentos.append(self.expressao())
 
         while self.match("VIRGULA"):
-            self.expressao()
+            argumentos.append(self.expressao())
+
+        return argumentos

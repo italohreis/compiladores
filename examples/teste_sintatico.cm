@@ -1,9 +1,26 @@
-int funcao_teste() {
-    print("teste");
+int soma(int a, int b) {
+    int resultado = a + b;
+    return resultado;
 }
 
 int x = 10;
+bool ativo = true;
 
-funcao_teste();
+scan(x);
 
-x = x + 1;
+if (ativo && x >= 10) {
+    x = soma(x, 5);
+    print("Valor atualizado");
+} else {
+    print("Condicao falsa");
+}
+
+while (x < 20) {
+    x = x + 1;
+}
+
+for (x = 0; x < 3; x = x + 1) {
+    print(x);
+}
+
+print(soma(x, 2));

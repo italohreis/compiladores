@@ -1,5 +1,6 @@
 from src.cmini.lexer.lexer import LexicalAnalyzer
 from src.cmini.parser.parser import Parser, ParserError
+from src.cmini.ast.printer import gerar_ast
 
 def read_code_from_file(file_path):
     with open(file_path, "r", encoding="utf-8") as file:
@@ -17,7 +18,7 @@ try:
     ast = parser.parse()
 
     print("Análise sintática concluída com sucesso!")
-    print(ast)
+    gerar_ast(ast)
 
 except ParserError as erro:
     print(erro)
