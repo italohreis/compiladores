@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AST - C Mini</title>
+<style>
+body {
+    margin: 0;
+    background: #F5F7FA;
+    color: #243447;
+    font-family: Arial, sans-serif;
+}
+header {
+    padding: 16px 22px;
+    background: white;
+    border-bottom: 1px solid #DCE3EA;
+}
+h1 { font-size: 20px; margin: 0 0 6px; }
+p { font-size: 13px; margin: 0; color: #627386; }
+main { height: calc(100vh - 76px); overflow: auto; }
+svg { display: block; }
+</style>
+</head>
+<body>
+<header>
+    <h1>Árvore Sintática Abstrata — C Mini</h1>
+</header>
+<main>
+
+    <svg xmlns="http://www.w3.org/2000/svg"
+         width="4911" height="1142"
+         viewBox="0 0 4911 1142">
+        <rect width="100%" height="100%" fill="#F5F7FA"/>
+        <path d="M 2455.5 63.0 C 2455.5 95.5, 2455.5 95.5, 2455.5 128.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<path d="M 2455.5 166.0 C 2455.5 198.5, 457.0 198.5, 457.0 231.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<path d="M 457.0 305.0 C 457.0 342.0, 191.0 342.0, 191.0 379.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<path d="M 191.0 417.0 C 191.0 454.0, 102.5 454.0, 102.5 491.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<rect x="30.0" y="491.0" width="145" height="74" rx="8" fill="#F4F6F7" stroke="#60758A" stroke-width="1.2"/>
+<text x="42.0" y="511.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Parametro</text>
+<text x="42.0" y="529.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">tipo: &#x27;int&#x27;</text>
+<text x="42.0" y="547.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">nome: &#x27;a&#x27;</text>
+<path d="M 191.0 417.0 C 191.0 454.0, 279.5 454.0, 279.5 491.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<rect x="207.0" y="491.0" width="145" height="74" rx="8" fill="#F4F6F7" stroke="#60758A" stroke-width="1.2"/>
+<text x="219.0" y="511.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Parametro</text>
+<text x="219.0" y="529.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">tipo: &#x27;int&#x27;</text>
+<text x="219.0" y="547.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">nome: &#x27;b&#x27;</text>
+<rect x="118.5" y="379.0" width="145" height="38" rx="8" fill="#F8F9F9" stroke="#60758A" stroke-width="1.2"/>
+<text x="130.5" y="399.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">parametros</text>
+<path d="M 457.0 305.0 C 457.0 342.0, 634.0 342.0, 634.0 379.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="545.5" y="338.0" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">corpo</text>
+<path d="M 634.0 417.0 C 634.0 463.0, 634.0 463.0, 634.0 509.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<path d="M 634.0 547.0 C 634.0 588.5, 545.0 588.5, 545.0 630.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<path d="M 545.0 704.0 C 545.0 736.5, 545.0 736.5, 545.0 769.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="545.0" y="732.5" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">inicializacao</text>
+<path d="M 545.0 825.0 C 545.0 857.5, 456.5 857.5, 456.5 890.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="500.8" y="853.5" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">esquerda</text>
+<rect x="384.0" y="890.0" width="145" height="56" rx="8" fill="#F4F6F7" stroke="#60758A" stroke-width="1.2"/>
+<text x="396.0" y="910.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Identificador</text>
+<text x="396.0" y="928.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">nome: &#x27;a&#x27;</text>
+<path d="M 545.0 825.0 C 545.0 857.5, 633.5 857.5, 633.5 890.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="589.2" y="853.5" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">direita</text>
+<rect x="561.0" y="890.0" width="145" height="56" rx="8" fill="#F4F6F7" stroke="#60758A" stroke-width="1.2"/>
+<text x="573.0" y="910.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Identificador</text>
+<text x="573.0" y="928.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">nome: &#x27;b&#x27;</text>
+<rect x="472.5" y="769.0" width="145" height="56" rx="8" fill="#FCF3CF" stroke="#60758A" stroke-width="1.2"/>
+<text x="484.5" y="789.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">OperacaoBinaria</text>
+<text x="484.5" y="807.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">operador: &#x27;+&#x27;</text>
+<rect x="472.0" y="630.0" width="146" height="74" rx="8" fill="#D5F5E3" stroke="#60758A" stroke-width="1.2"/>
+<text x="484.0" y="650.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Declaracao</text>
+<text x="484.0" y="668.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">tipo: &#x27;int&#x27;</text>
+<text x="484.0" y="686.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">nome: &#x27;resultado&#x27;</text>
+<path d="M 634.0 547.0 C 634.0 597.5, 811.0 597.5, 811.0 648.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<path d="M 811.0 686.0 C 811.0 727.5, 811.0 727.5, 811.0 769.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="811.0" y="723.5" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">expressao</text>
+<rect x="738.0" y="769.0" width="146" height="56" rx="8" fill="#F4F6F7" stroke="#60758A" stroke-width="1.2"/>
+<text x="750.0" y="789.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Identificador</text>
+<text x="750.0" y="807.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">nome: &#x27;resultado&#x27;</text>
+<rect x="738.5" y="648.0" width="145" height="38" rx="8" fill="#D5F5E3" stroke="#60758A" stroke-width="1.2"/>
+<text x="750.5" y="668.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Return</text>
+<rect x="561.5" y="509.0" width="145" height="38" rx="8" fill="#F8F9F9" stroke="#60758A" stroke-width="1.2"/>
+<text x="573.5" y="529.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">comandos</text>
+<rect x="561.5" y="379.0" width="145" height="38" rx="8" fill="#D6EAF8" stroke="#60758A" stroke-width="1.2"/>
+<text x="573.5" y="399.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Bloco</text>
+<rect x="377.0" y="231.0" width="160" height="74" rx="8" fill="#D6EAF8" stroke="#60758A" stroke-width="1.2"/>
+<text x="389.0" y="251.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Funcao</text>
+<text x="389.0" y="269.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">tipo_retorno: &#x27;int&#x27;</text>
+<text x="389.0" y="287.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">nome: &#x27;soma&#x27;</text>
+<path d="M 2455.5 166.0 C 2455.5 198.5, 988.5 198.5, 988.5 231.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<path d="M 988.5 305.0 C 988.5 337.5, 988.5 337.5, 988.5 370.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="988.5" y="333.5" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">inicializacao</text>
+<rect x="916.0" y="370.0" width="145" height="56" rx="8" fill="#F4F6F7" stroke="#60758A" stroke-width="1.2"/>
+<text x="928.0" y="390.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Numero</text>
+<text x="928.0" y="408.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">valor: 10</text>
+<rect x="916.0" y="231.0" width="145" height="74" rx="8" fill="#D5F5E3" stroke="#60758A" stroke-width="1.2"/>
+<text x="928.0" y="251.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Declaracao</text>
+<text x="928.0" y="269.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">tipo: &#x27;int&#x27;</text>
+<text x="928.0" y="287.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">nome: &#x27;x&#x27;</text>
+<path d="M 2455.5 166.0 C 2455.5 198.5, 1165.5 198.5, 1165.5 231.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<path d="M 1165.5 305.0 C 1165.5 337.5, 1165.5 337.5, 1165.5 370.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="1165.5" y="333.5" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">inicializacao</text>
+<rect x="1093.0" y="370.0" width="145" height="56" rx="8" fill="#F4F6F7" stroke="#60758A" stroke-width="1.2"/>
+<text x="1105.0" y="390.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Booleano</text>
+<text x="1105.0" y="408.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">valor: True</text>
+<rect x="1093.0" y="231.0" width="145" height="74" rx="8" fill="#D5F5E3" stroke="#60758A" stroke-width="1.2"/>
+<text x="1105.0" y="251.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Declaracao</text>
+<text x="1105.0" y="269.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">tipo: &#x27;bool&#x27;</text>
+<text x="1105.0" y="287.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">nome: &#x27;ativo&#x27;</text>
+<path d="M 2455.5 166.0 C 2455.5 203.0, 1342.5 203.0, 1342.5 240.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<rect x="1270.0" y="240.0" width="145" height="56" rx="8" fill="#D5F5E3" stroke="#60758A" stroke-width="1.2"/>
+<text x="1282.0" y="260.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Scan</text>
+<text x="1282.0" y="278.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">nome: &#x27;x&#x27;</text>
+<path d="M 2455.5 166.0 C 2455.5 207.5, 2102.0 207.5, 2102.0 249.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<path d="M 2102.0 287.0 C 2102.0 328.5, 1696.5 328.5, 1696.5 370.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="1899.2" y="324.5" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">condicao</text>
+<path d="M 1696.5 426.0 C 1696.5 463.0, 1519.5 463.0, 1519.5 500.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="1608.0" y="459.0" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">esquerda</text>
+<rect x="1447.0" y="500.0" width="145" height="56" rx="8" fill="#F4F6F7" stroke="#60758A" stroke-width="1.2"/>
+<text x="1459.0" y="520.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Identificador</text>
+<text x="1459.0" y="538.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">nome: &#x27;ativo&#x27;</text>
+<path d="M 1696.5 426.0 C 1696.5 463.0, 1785.0 463.0, 1785.0 500.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="1740.8" y="459.0" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">direita</text>
+<path d="M 1785.0 556.0 C 1785.0 597.5, 1696.5 597.5, 1696.5 639.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="1740.8" y="593.5" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">esquerda</text>
+<rect x="1624.0" y="639.0" width="145" height="56" rx="8" fill="#F4F6F7" stroke="#60758A" stroke-width="1.2"/>
+<text x="1636.0" y="659.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Identificador</text>
+<text x="1636.0" y="677.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">nome: &#x27;x&#x27;</text>
+<path d="M 1785.0 556.0 C 1785.0 597.5, 1873.5 597.5, 1873.5 639.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="1829.2" y="593.5" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">direita</text>
+<rect x="1801.0" y="639.0" width="145" height="56" rx="8" fill="#F4F6F7" stroke="#60758A" stroke-width="1.2"/>
+<text x="1813.0" y="659.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Numero</text>
+<text x="1813.0" y="677.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">valor: 10</text>
+<rect x="1712.5" y="500.0" width="145" height="56" rx="8" fill="#FCF3CF" stroke="#60758A" stroke-width="1.2"/>
+<text x="1724.5" y="520.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">OperacaoBinaria</text>
+<text x="1724.5" y="538.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">operador: &#x27;&gt;=&#x27;</text>
+<rect x="1624.0" y="370.0" width="145" height="56" rx="8" fill="#FCF3CF" stroke="#60758A" stroke-width="1.2"/>
+<text x="1636.0" y="390.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">OperacaoBinaria</text>
+<text x="1636.0" y="408.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">operador: &#x27;&amp;&amp;&#x27;</text>
+<path d="M 2102.0 287.0 C 2102.0 333.0, 2257.0 333.0, 2257.0 379.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="2179.5" y="329.0" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">bloco_if</text>
+<path d="M 2257.0 417.0 C 2257.0 463.0, 2257.0 463.0, 2257.0 509.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<path d="M 2257.0 547.0 C 2257.0 593.0, 2139.0 593.0, 2139.0 639.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<path d="M 2139.0 695.0 C 2139.0 732.0, 2139.0 732.0, 2139.0 769.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="2139.0" y="728.0" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">expressao</text>
+<path d="M 2139.0 825.0 C 2139.0 862.0, 2139.0 862.0, 2139.0 899.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<path d="M 2139.0 937.0 C 2139.0 974.0, 2050.5 974.0, 2050.5 1011.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<rect x="1978.0" y="1011.0" width="145" height="56" rx="8" fill="#F4F6F7" stroke="#60758A" stroke-width="1.2"/>
+<text x="1990.0" y="1031.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Identificador</text>
+<text x="1990.0" y="1049.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">nome: &#x27;x&#x27;</text>
+<path d="M 2139.0 937.0 C 2139.0 974.0, 2227.5 974.0, 2227.5 1011.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<rect x="2155.0" y="1011.0" width="145" height="56" rx="8" fill="#F4F6F7" stroke="#60758A" stroke-width="1.2"/>
+<text x="2167.0" y="1031.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Numero</text>
+<text x="2167.0" y="1049.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">valor: 5</text>
+<rect x="2066.5" y="899.0" width="145" height="38" rx="8" fill="#F8F9F9" stroke="#60758A" stroke-width="1.2"/>
+<text x="2078.5" y="919.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">argumentos</text>
+<rect x="2066.5" y="769.0" width="145" height="56" rx="8" fill="#E8DAEF" stroke="#60758A" stroke-width="1.2"/>
+<text x="2078.5" y="789.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">ChamadaFuncao</text>
+<text x="2078.5" y="807.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">nome: &#x27;soma&#x27;</text>
+<rect x="2066.5" y="639.0" width="145" height="56" rx="8" fill="#D5F5E3" stroke="#60758A" stroke-width="1.2"/>
+<text x="2078.5" y="659.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Atribuicao</text>
+<text x="2078.5" y="677.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">nome: &#x27;x&#x27;</text>
+<path d="M 2257.0 547.0 C 2257.0 597.5, 2434.0 597.5, 2434.0 648.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<path d="M 2434.0 686.0 C 2434.0 727.5, 2434.0 727.5, 2434.0 769.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="2434.0" y="723.5" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">valor</text>
+<rect x="2332.0" y="769.0" width="204" height="56" rx="8" fill="#F4F6F7" stroke="#60758A" stroke-width="1.2"/>
+<text x="2344.0" y="789.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">String</text>
+<text x="2344.0" y="807.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">valor: &#x27;Valor atualizado&#x27;</text>
+<rect x="2361.5" y="648.0" width="145" height="38" rx="8" fill="#D5F5E3" stroke="#60758A" stroke-width="1.2"/>
+<text x="2373.5" y="668.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Print</text>
+<rect x="2184.5" y="509.0" width="145" height="38" rx="8" fill="#F8F9F9" stroke="#60758A" stroke-width="1.2"/>
+<text x="2196.5" y="529.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">comandos</text>
+<rect x="2184.5" y="379.0" width="145" height="38" rx="8" fill="#D6EAF8" stroke="#60758A" stroke-width="1.2"/>
+<text x="2196.5" y="399.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Bloco</text>
+<path d="M 2102.0 287.0 C 2102.0 333.0, 2662.5 333.0, 2662.5 379.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="2382.2" y="329.0" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">bloco_else</text>
+<path d="M 2662.5 417.0 C 2662.5 463.0, 2662.5 463.0, 2662.5 509.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<path d="M 2662.5 547.0 C 2662.5 597.5, 2662.5 597.5, 2662.5 648.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<path d="M 2662.5 686.0 C 2662.5 727.5, 2662.5 727.5, 2662.5 769.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="2662.5" y="723.5" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">valor</text>
+<rect x="2568.0" y="769.0" width="189" height="56" rx="8" fill="#F4F6F7" stroke="#60758A" stroke-width="1.2"/>
+<text x="2580.0" y="789.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">String</text>
+<text x="2580.0" y="807.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">valor: &#x27;Condicao falsa&#x27;</text>
+<rect x="2590.0" y="648.0" width="145" height="38" rx="8" fill="#D5F5E3" stroke="#60758A" stroke-width="1.2"/>
+<text x="2602.0" y="668.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Print</text>
+<rect x="2590.0" y="509.0" width="145" height="38" rx="8" fill="#F8F9F9" stroke="#60758A" stroke-width="1.2"/>
+<text x="2602.0" y="529.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">comandos</text>
+<rect x="2590.0" y="379.0" width="145" height="38" rx="8" fill="#D6EAF8" stroke="#60758A" stroke-width="1.2"/>
+<text x="2602.0" y="399.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Bloco</text>
+<rect x="2029.5" y="249.0" width="145" height="38" rx="8" fill="#FDEBD0" stroke="#60758A" stroke-width="1.2"/>
+<text x="2041.5" y="269.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">If</text>
+<path d="M 2455.5 166.0 C 2455.5 207.5, 3127.0 207.5, 3127.0 249.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<path d="M 3127.0 287.0 C 3127.0 328.5, 2950.0 328.5, 2950.0 370.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="3038.5" y="324.5" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">condicao</text>
+<path d="M 2950.0 426.0 C 2950.0 463.0, 2861.5 463.0, 2861.5 500.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="2905.8" y="459.0" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">esquerda</text>
+<rect x="2789.0" y="500.0" width="145" height="56" rx="8" fill="#F4F6F7" stroke="#60758A" stroke-width="1.2"/>
+<text x="2801.0" y="520.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Identificador</text>
+<text x="2801.0" y="538.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">nome: &#x27;x&#x27;</text>
+<path d="M 2950.0 426.0 C 2950.0 463.0, 3038.5 463.0, 3038.5 500.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="2994.2" y="459.0" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">direita</text>
+<rect x="2966.0" y="500.0" width="145" height="56" rx="8" fill="#F4F6F7" stroke="#60758A" stroke-width="1.2"/>
+<text x="2978.0" y="520.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Numero</text>
+<text x="2978.0" y="538.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">valor: 20</text>
+<rect x="2877.5" y="370.0" width="145" height="56" rx="8" fill="#FCF3CF" stroke="#60758A" stroke-width="1.2"/>
+<text x="2889.5" y="390.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">OperacaoBinaria</text>
+<text x="2889.5" y="408.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">operador: &#x27;&lt;&#x27;</text>
+<path d="M 3127.0 287.0 C 3127.0 333.0, 3304.0 333.0, 3304.0 379.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="3215.5" y="329.0" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">corpo</text>
+<path d="M 3304.0 417.0 C 3304.0 463.0, 3304.0 463.0, 3304.0 509.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<path d="M 3304.0 547.0 C 3304.0 593.0, 3304.0 593.0, 3304.0 639.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<path d="M 3304.0 695.0 C 3304.0 732.0, 3304.0 732.0, 3304.0 769.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="3304.0" y="728.0" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">expressao</text>
+<path d="M 3304.0 825.0 C 3304.0 857.5, 3215.5 857.5, 3215.5 890.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="3259.8" y="853.5" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">esquerda</text>
+<rect x="3143.0" y="890.0" width="145" height="56" rx="8" fill="#F4F6F7" stroke="#60758A" stroke-width="1.2"/>
+<text x="3155.0" y="910.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Identificador</text>
+<text x="3155.0" y="928.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">nome: &#x27;x&#x27;</text>
+<path d="M 3304.0 825.0 C 3304.0 857.5, 3392.5 857.5, 3392.5 890.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="3348.2" y="853.5" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">direita</text>
+<rect x="3320.0" y="890.0" width="145" height="56" rx="8" fill="#F4F6F7" stroke="#60758A" stroke-width="1.2"/>
+<text x="3332.0" y="910.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Numero</text>
+<text x="3332.0" y="928.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">valor: 1</text>
+<rect x="3231.5" y="769.0" width="145" height="56" rx="8" fill="#FCF3CF" stroke="#60758A" stroke-width="1.2"/>
+<text x="3243.5" y="789.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">OperacaoBinaria</text>
+<text x="3243.5" y="807.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">operador: &#x27;+&#x27;</text>
+<rect x="3231.5" y="639.0" width="145" height="56" rx="8" fill="#D5F5E3" stroke="#60758A" stroke-width="1.2"/>
+<text x="3243.5" y="659.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Atribuicao</text>
+<text x="3243.5" y="677.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">nome: &#x27;x&#x27;</text>
+<rect x="3231.5" y="509.0" width="145" height="38" rx="8" fill="#F8F9F9" stroke="#60758A" stroke-width="1.2"/>
+<text x="3243.5" y="529.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">comandos</text>
+<rect x="3231.5" y="379.0" width="145" height="38" rx="8" fill="#D6EAF8" stroke="#60758A" stroke-width="1.2"/>
+<text x="3243.5" y="399.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Bloco</text>
+<rect x="3054.5" y="249.0" width="145" height="38" rx="8" fill="#FDEBD0" stroke="#60758A" stroke-width="1.2"/>
+<text x="3066.5" y="269.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">While</text>
+<path d="M 2455.5 166.0 C 2455.5 207.5, 4012.0 207.5, 4012.0 249.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<path d="M 4012.0 287.0 C 4012.0 328.5, 3569.5 328.5, 3569.5 370.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="3790.8" y="324.5" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">inicializacao</text>
+<path d="M 3569.5 426.0 C 3569.5 463.0, 3569.5 463.0, 3569.5 500.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="3569.5" y="459.0" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">expressao</text>
+<rect x="3497.0" y="500.0" width="145" height="56" rx="8" fill="#F4F6F7" stroke="#60758A" stroke-width="1.2"/>
+<text x="3509.0" y="520.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Numero</text>
+<text x="3509.0" y="538.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">valor: 0</text>
+<rect x="3497.0" y="370.0" width="145" height="56" rx="8" fill="#D5F5E3" stroke="#60758A" stroke-width="1.2"/>
+<text x="3509.0" y="390.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Atribuicao</text>
+<text x="3509.0" y="408.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">nome: &#x27;x&#x27;</text>
+<path d="M 4012.0 287.0 C 4012.0 328.5, 3835.0 328.5, 3835.0 370.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="3923.5" y="324.5" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">condicao</text>
+<path d="M 3835.0 426.0 C 3835.0 463.0, 3746.5 463.0, 3746.5 500.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="3790.8" y="459.0" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">esquerda</text>
+<rect x="3674.0" y="500.0" width="145" height="56" rx="8" fill="#F4F6F7" stroke="#60758A" stroke-width="1.2"/>
+<text x="3686.0" y="520.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Identificador</text>
+<text x="3686.0" y="538.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">nome: &#x27;x&#x27;</text>
+<path d="M 3835.0 426.0 C 3835.0 463.0, 3923.5 463.0, 3923.5 500.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="3879.2" y="459.0" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">direita</text>
+<rect x="3851.0" y="500.0" width="145" height="56" rx="8" fill="#F4F6F7" stroke="#60758A" stroke-width="1.2"/>
+<text x="3863.0" y="520.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Numero</text>
+<text x="3863.0" y="538.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">valor: 3</text>
+<rect x="3762.5" y="370.0" width="145" height="56" rx="8" fill="#FCF3CF" stroke="#60758A" stroke-width="1.2"/>
+<text x="3774.5" y="390.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">OperacaoBinaria</text>
+<text x="3774.5" y="408.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">operador: &#x27;&lt;&#x27;</text>
+<path d="M 4012.0 287.0 C 4012.0 328.5, 4189.0 328.5, 4189.0 370.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="4100.5" y="324.5" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">incremento</text>
+<path d="M 4189.0 426.0 C 4189.0 463.0, 4189.0 463.0, 4189.0 500.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="4189.0" y="459.0" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">expressao</text>
+<path d="M 4189.0 556.0 C 4189.0 597.5, 4100.5 597.5, 4100.5 639.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="4144.8" y="593.5" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">esquerda</text>
+<rect x="4028.0" y="639.0" width="145" height="56" rx="8" fill="#F4F6F7" stroke="#60758A" stroke-width="1.2"/>
+<text x="4040.0" y="659.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Identificador</text>
+<text x="4040.0" y="677.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">nome: &#x27;x&#x27;</text>
+<path d="M 4189.0 556.0 C 4189.0 597.5, 4277.5 597.5, 4277.5 639.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="4233.2" y="593.5" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">direita</text>
+<rect x="4205.0" y="639.0" width="145" height="56" rx="8" fill="#F4F6F7" stroke="#60758A" stroke-width="1.2"/>
+<text x="4217.0" y="659.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Numero</text>
+<text x="4217.0" y="677.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">valor: 1</text>
+<rect x="4116.5" y="500.0" width="145" height="56" rx="8" fill="#FCF3CF" stroke="#60758A" stroke-width="1.2"/>
+<text x="4128.5" y="520.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">OperacaoBinaria</text>
+<text x="4128.5" y="538.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">operador: &#x27;+&#x27;</text>
+<rect x="4116.5" y="370.0" width="145" height="56" rx="8" fill="#D5F5E3" stroke="#60758A" stroke-width="1.2"/>
+<text x="4128.5" y="390.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Atribuicao</text>
+<text x="4128.5" y="408.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">nome: &#x27;x&#x27;</text>
+<path d="M 4012.0 287.0 C 4012.0 333.0, 4454.5 333.0, 4454.5 379.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="4233.2" y="329.0" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">corpo</text>
+<path d="M 4454.5 417.0 C 4454.5 463.0, 4454.5 463.0, 4454.5 509.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<path d="M 4454.5 547.0 C 4454.5 597.5, 4454.5 597.5, 4454.5 648.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<path d="M 4454.5 686.0 C 4454.5 727.5, 4454.5 727.5, 4454.5 769.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="4454.5" y="723.5" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">valor</text>
+<rect x="4382.0" y="769.0" width="145" height="56" rx="8" fill="#F4F6F7" stroke="#60758A" stroke-width="1.2"/>
+<text x="4394.0" y="789.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Identificador</text>
+<text x="4394.0" y="807.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">nome: &#x27;x&#x27;</text>
+<rect x="4382.0" y="648.0" width="145" height="38" rx="8" fill="#D5F5E3" stroke="#60758A" stroke-width="1.2"/>
+<text x="4394.0" y="668.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Print</text>
+<rect x="4382.0" y="509.0" width="145" height="38" rx="8" fill="#F8F9F9" stroke="#60758A" stroke-width="1.2"/>
+<text x="4394.0" y="529.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">comandos</text>
+<rect x="4382.0" y="379.0" width="145" height="38" rx="8" fill="#D6EAF8" stroke="#60758A" stroke-width="1.2"/>
+<text x="4394.0" y="399.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Bloco</text>
+<rect x="3939.5" y="249.0" width="145" height="38" rx="8" fill="#FDEBD0" stroke="#60758A" stroke-width="1.2"/>
+<text x="3951.5" y="269.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">For</text>
+<path d="M 2455.5 166.0 C 2455.5 207.5, 4720.0 207.5, 4720.0 249.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<path d="M 4720.0 287.0 C 4720.0 328.5, 4720.0 328.5, 4720.0 370.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<text x="4720.0" y="324.5" text-anchor="middle" font-family="Arial" font-size="11" fill="#526579" style="paint-order:stroke;stroke:#F5F7FA;stroke-width:5px">valor</text>
+<path d="M 4720.0 426.0 C 4720.0 467.5, 4720.0 467.5, 4720.0 509.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<path d="M 4720.0 547.0 C 4720.0 593.0, 4631.5 593.0, 4631.5 639.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<rect x="4559.0" y="639.0" width="145" height="56" rx="8" fill="#F4F6F7" stroke="#60758A" stroke-width="1.2"/>
+<text x="4571.0" y="659.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Identificador</text>
+<text x="4571.0" y="677.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">nome: &#x27;x&#x27;</text>
+<path d="M 4720.0 547.0 C 4720.0 593.0, 4808.5 593.0, 4808.5 639.0" fill="none" stroke="#8293A5" stroke-width="1.5"/>
+<rect x="4736.0" y="639.0" width="145" height="56" rx="8" fill="#F4F6F7" stroke="#60758A" stroke-width="1.2"/>
+<text x="4748.0" y="659.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Numero</text>
+<text x="4748.0" y="677.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">valor: 2</text>
+<rect x="4647.5" y="509.0" width="145" height="38" rx="8" fill="#F8F9F9" stroke="#60758A" stroke-width="1.2"/>
+<text x="4659.5" y="529.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">argumentos</text>
+<rect x="4647.5" y="370.0" width="145" height="56" rx="8" fill="#E8DAEF" stroke="#60758A" stroke-width="1.2"/>
+<text x="4659.5" y="390.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">ChamadaFuncao</text>
+<text x="4659.5" y="408.0" font-family="Consolas, monospace" font-size="11" font-weight="400" fill="#243447">nome: &#x27;soma&#x27;</text>
+<rect x="4647.5" y="249.0" width="145" height="38" rx="8" fill="#D5F5E3" stroke="#60758A" stroke-width="1.2"/>
+<text x="4659.5" y="269.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Print</text>
+<rect x="2383.0" y="128.0" width="145" height="38" rx="8" fill="#F8F9F9" stroke="#60758A" stroke-width="1.2"/>
+<text x="2395.0" y="148.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">elementos</text>
+<rect x="2383.0" y="25.0" width="145" height="38" rx="8" fill="#D6EAF8" stroke="#60758A" stroke-width="1.2"/>
+<text x="2395.0" y="45.0" font-family="Consolas, monospace" font-size="12" font-weight="700" fill="#243447">Programa</text>
+    </svg>
+    
+</main>
+</body>
+</html>
