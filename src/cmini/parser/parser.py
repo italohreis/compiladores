@@ -53,6 +53,11 @@ class Parser:
 
         return self.advance()
 
+    def _com_linha(self, no, token):
+        if no is not None and token is not None:
+            no.linha = token.linha
+        return no
+
     # Programa e elementos globais
 
     def parse(self):
@@ -97,7 +102,8 @@ class Parser:
 
         self.expect("PONTO_VIRGULA")
 
-        return Declaracao(tipo, identificador.valor, inicializacao)
+        declaracao = Declaracao(tipo, identificador.valor, inicializacao)
+        return self._com_linha(declaracao, identificador)
 
     # Funções e parâmetros
 
@@ -107,12 +113,13 @@ class Parser:
         self.expect("FECHA_PARENTESES")
         corpo = self.bloco()
 
-        return Funcao(
+        funcao = Funcao(
             tipo,
             identificador.valor,
             parametros,
             corpo
         )
+        return self._com_linha(funcao, identificador)
 
     def parametros(self):
         parametros = []
@@ -122,12 +129,16 @@ class Parser:
 
         tipo = self.tipo()
         nome = self.expect("IDENTIFICADOR")
-        parametros.append(Parametro(tipo, nome.valor))
+        parametro = Parametro(tipo, nome.valor)
+        parametro.linha = nome.linha
+        parametros.append(parametro)
 
         while self.match("VIRGULA"):
             tipo = self.tipo()
             nome = self.expect("IDENTIFICADOR")
-            parametros.append(Parametro(tipo, nome.valor))
+            parametro = Parametro(tipo, nome.valor)
+            parametro.linha = nome.linha
+            parametros.append(parametro)
 
         return parametros
 
@@ -145,13 +156,15 @@ class Parser:
             if self.match("ATRIBUICAO"):
                 expressao = self.expressao()
                 self.expect("PONTO_VIRGULA")
-                return Atribuicao(nome.valor, expressao)
+                atribuicao = Atribuicao(nome.valor, expressao)
+                return self._com_linha(atribuicao, nome)
 
             if self.match("ABRE_PARENTESES"):
                 argumentos = self.argumentos()
                 self.expect("FECHA_PARENTESES")
                 self.expect("PONTO_VIRGULA")
-                return ChamadaFuncao(nome.valor, argumentos)
+                chamada = ChamadaFuncao(nome.valor, argumentos)
+                return self._com_linha(chamada, nome)
 
             raise ParserError(
                 f"Erro sintático na linha {nome.linha}: "
@@ -184,7 +197,7 @@ class Parser:
         raise ParserError("Fim inesperado do código.")
 
     def selecao(self):
-        self.expect("IF")
+        token_if = self.expect("IF")
         self.expect("ABRE_PARENTESES")
         condicao = self.expressao()
         self.expect("FECHA_PARENTESES")
@@ -195,18 +208,21 @@ class Parser:
         if self.match("ELSE"):
             bloco_else = self.bloco()
 
-        return If(condicao, bloco_if, bloco_else)
+        no = If(condicao, bloco_if, bloco_else)
+        return self._com_linha(no, token_if)
 
     def repeticao(self):
-        if self.match("WHILE"):
+        if self.check("WHILE"):
+            token_while = self.expect("WHILE")
             self.expect("ABRE_PARENTESES")
             condicao = self.expressao()
             self.expect("FECHA_PARENTESES")
             corpo = self.bloco()
 
-            return While(condicao, corpo)
+            no = While(condicao, corpo)
+            return self._com_linha(no, token_while)
 
-        self.expect("FOR")
+        token_for = self.expect("FOR")
         self.expect("ABRE_PARENTESES")
 
         # Inicialização: identificador = expressão
@@ -223,45 +239,51 @@ class Parser:
 
         corpo = self.bloco()
 
-        return For(inicializacao, condicao, incremento, corpo)
+        no = For(inicializacao, condicao, incremento, corpo)
+        return self._com_linha(no, token_for)
 
     def atribuicao_for(self):
         nome = self.expect("IDENTIFICADOR")
         self.expect("ATRIBUICAO")
         expressao = self.expressao()
 
-        return Atribuicao(nome.valor, expressao)
+        atribuicao = Atribuicao(nome.valor, expressao)
+        return self._com_linha(atribuicao, nome)
 
     def entrada(self):
-        self.expect("SCAN")
+        token_scan = self.expect("SCAN")
         self.expect("ABRE_PARENTESES")
         nome = self.expect("IDENTIFICADOR")
         self.expect("FECHA_PARENTESES")
         self.expect("PONTO_VIRGULA")
 
-        return Scan(nome.valor)
+        scan = Scan(nome.valor)
+        return self._com_linha(scan, token_scan)
 
     def saida(self):
-        self.expect("PRINT")
+        token_print = self.expect("PRINT")
         self.expect("ABRE_PARENTESES")
 
         if self.check("STRING"):
             token = self.advance()
             valor = String(token.valor[1:-1])
+            valor.linha = token.linha
         else:
             valor = self.expressao()
 
         self.expect("FECHA_PARENTESES")
         self.expect("PONTO_VIRGULA")
 
-        return Print(valor)
+        print_no = Print(valor)
+        return self._com_linha(print_no, token_print)
 
     def retorno(self):
-        self.expect("RETURN")
+        token_return = self.expect("RETURN")
         expressao = self.expressao()
         self.expect("PONTO_VIRGULA")
 
-        return Return(expressao)
+        retorno = Return(expressao)
+        return self._com_linha(retorno, token_return)
 
     def bloco(self):
         self.expect("ABRE_CHAVES")
@@ -295,10 +317,12 @@ class Parser:
         esquerda = self.and_expr()
 
         while self.match("OR"):
+            operador = self.tokens[self.pos - 1]
             direita = self.and_expr()
             esquerda = OperacaoBinaria(
                 esquerda, "||", direita
             )
+            esquerda.linha = operador.linha
 
         return esquerda
 
@@ -306,10 +330,12 @@ class Parser:
         esquerda = self.relacional()
 
         while self.match("AND"):
+            operador = self.tokens[self.pos - 1]
             direita = self.relacional()
             esquerda = OperacaoBinaria(
                 esquerda, "&&", direita
             )
+            esquerda.linha = operador.linha
 
         return esquerda
 
@@ -328,6 +354,7 @@ class Parser:
             esquerda = OperacaoBinaria(
                 esquerda, operador.valor, direita
             )
+            esquerda.linha = operador.linha
 
         return esquerda
 
@@ -341,6 +368,7 @@ class Parser:
             esquerda = OperacaoBinaria(
                 esquerda, operador.valor, direita
             )
+            esquerda.linha = operador.linha
 
         return esquerda
 
@@ -358,23 +386,40 @@ class Parser:
             esquerda = OperacaoBinaria(
                 esquerda, operador.valor, direita
             )
+            esquerda.linha = operador.linha
 
         return esquerda
 
     def fator(self):
         if self.match("NOT"):
-            return OperacaoUnaria("!", self.fator())
+            operador = self.tokens[self.pos - 1]
+            operacao = OperacaoUnaria("!", self.fator())
+            operacao.linha = operador.linha
+            return operacao
+
+        if self.check("MENOS"):
+            operador = self.advance()
+            operacao = OperacaoUnaria("-", self.fator())
+            operacao.linha = operador.linha
+            return operacao
 
         if self.check("NUMERO"):
-            return Numero(int(self.advance().valor))
+            token = self.advance()
+            numero = Numero(int(token.valor))
+            numero.linha = token.linha
+            return numero
 
         if self.check("TRUE"):
-            self.advance()
-            return Booleano(True)
+            token = self.advance()
+            literal = Booleano(True)
+            literal.linha = token.linha
+            return literal
 
         if self.check("FALSE"):
-            self.advance()
-            return Booleano(False)
+            token = self.advance()
+            literal = Booleano(False)
+            literal.linha = token.linha
+            return literal
 
         if self.check("IDENTIFICADOR"):
             nome = self.advance()
@@ -382,10 +427,13 @@ class Parser:
             if self.match("ABRE_PARENTESES"):
                 argumentos = self.argumentos()
                 self.expect("FECHA_PARENTESES")
+                chamada = ChamadaFuncao(nome.valor, argumentos)
+                chamada.linha = nome.linha
+                return chamada
 
-                return ChamadaFuncao(nome.valor, argumentos)
-
-            return Identificador(nome.valor)
+            identificador = Identificador(nome.valor)
+            identificador.linha = nome.linha
+            return identificador
 
         if self.match("ABRE_PARENTESES"):
             expressao = self.expressao()

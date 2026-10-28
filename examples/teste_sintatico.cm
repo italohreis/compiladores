@@ -1,6 +1,9 @@
-int soma(int a, int b) {
-    int resultado = a + b;
-    return resultado;
+int fatorial(int n) {
+    if (n <= 1) {
+        return 1;
+    } else {
+        return n * fatorial(n - 1);
+    }
 }
 
 int x = 10;
@@ -9,7 +12,7 @@ bool ativo = true;
 scan(x);
 
 if (ativo && x >= 10) {
-    x = soma(x, 5);
+    x = fatorial(x);
     print("Valor atualizado");
 } else {
     print("Condicao falsa");
@@ -23,4 +26,4 @@ for (x = 0; x < 3; x = x + 1) {
     print(x);
 }
 
-print(soma(x, 2));
+print(fatorial(x));
