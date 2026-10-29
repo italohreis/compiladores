@@ -2,6 +2,7 @@ from src.cmini.lexer.lexer import LexicalAnalyzer
 from src.cmini.parser.parser import Parser, ParserError
 from src.cmini.semantic.analyzer import SemanticAnalyzer, SemanticError
 from src.cmini.ast.printer import gerar_ast
+from src.cmini.codegen import CCodeGenerator
 
 
 def read_code_from_file(file_path):
@@ -31,6 +32,11 @@ try:
     tabela = analisador_semantico.gerar_tabela_simbolos()
     for item in tabela:
         print(f"Nome: {item['nome']}, Tipo: {item['tipo']}, Categoria: {item['categoria']}, Escopo: {item['escopo']}")
+
+    codigo_c = CCodeGenerator().generate(ast)
+    with open("saida/codigo_gerado.c", "w", encoding="utf-8") as arquivo:
+        arquivo.write(codigo_c)
+    print("\nCódigo C gerado em: saida/codigo_gerado.c")
 
 except SyntaxError as erro:
     print(f"Erro léxico: {erro}")

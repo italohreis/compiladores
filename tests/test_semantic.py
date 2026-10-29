@@ -3,6 +3,7 @@ import unittest
 from src.cmini.lexer.lexer import LexicalAnalyzer
 from src.cmini.parser.parser import Parser
 from src.cmini.semantic.analyzer import SemanticAnalyzer, SemanticError
+from src.cmini.codegen import CCodeGenerator
 
 
 def analisar_codigo(codigo):
@@ -114,6 +115,25 @@ class TestAnalisadorSemantico(unittest.TestCase):
         self.assertTrue(any(item["nome"] == "soma" and item["categoria"] == "funcao" for item in tabela))
         self.assertTrue(any(item["nome"] == "a" and item["categoria"] == "variavel" and item["escopo"] == "soma" for item in tabela))
         self.assertTrue(any(item["nome"] == "total" and item["categoria"] == "variavel" and item["escopo"] == "soma" for item in tabela))
+
+    def test_geracao_de_codigo_c(self):
+        codigo = """
+        int x = 3;
+        int dobro(int n) { return n * 2 + x; }
+        bool ok = true;
+        if (ok) { print(dobro(x)); } else { print(0); }
+        """
+        ast = Parser(LexicalAnalyzer().analyze(codigo)).parse()
+        SemanticAnalyzer().analisar(ast)
+        gerado = CCodeGenerator().generate(ast)
+
+        self.assertIn("#include <stdbool.h>", gerado)
+        self.assertIn("int x;", gerado)
+        self.assertIn("int dobro(int n);", gerado)
+        self.assertIn("return ((n * 2) + x);", gerado)
+        self.assertIn("x = 3;", gerado)
+        self.assertIn("printf(\"%d\", dobro(x));", gerado)
+        self.assertIn("int main(void)", gerado)
 
 
 if __name__ == "__main__":
