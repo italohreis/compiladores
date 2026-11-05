@@ -1,46 +1,129 @@
+import argparse
+import subprocess
+import sys
+from pathlib import Path
+
+from src.cmini.ast.printer import gerar_ast
+from src.cmini.codegen import CCodeGenerator
 from src.cmini.lexer.lexer import LexicalAnalyzer
 from src.cmini.parser.parser import Parser, ParserError
 from src.cmini.semantic.analyzer import SemanticAnalyzer, SemanticError
-from src.cmini.ast.printer import gerar_ast
-from src.cmini.codegen import CCodeGenerator
+
+
+ROOT = Path(__file__).resolve().parent
 
 
 def read_code_from_file(file_path):
-    with open(file_path, "r", encoding="utf-8") as file:
-        return file.read()
+    return file_path.read_text(encoding="utf-8")
 
 
-file_path = "examples/teste_sintatico.cm"
+def parse_arguments():
+    parser = argparse.ArgumentParser(
+        description="Compilador C Mini: analisa um arquivo .cm e gera um executável C."
+    )
+    parser.add_argument("arquivo", type=Path, help="caminho do arquivo-fonte C Mini (.cm)")
+    parser.add_argument(
+        "--run",
+        action="store_true",
+        help="executa o programa gerado depois da compilação",
+    )
+    parser.add_argument(
+        "--ast",
+        action="store_true",
+        help="gera também a visualização HTML da AST",
+    )
+    return parser.parse_args()
 
-try:
+
+def compiler_command(source_c, executable):
+    return [
+        "gcc",
+        "-Wall",
+        "-Wextra",
+        "-std=c11",
+        str(source_c),
+        "-o",
+        str(executable),
+    ]
+
+
+def compile_file(file_path, run=False, generate_ast=False):
+    file_path = file_path.resolve()
+    if not file_path.is_file():
+        raise FileNotFoundError(f"arquivo não encontrado: {file_path}")
+    if file_path.suffix.lower() != ".cm":
+        raise ValueError("o arquivo de entrada deve ter a extensão .cm")
+
     code = read_code_from_file(file_path)
-
-    lexer = LexicalAnalyzer()
-    tokens = lexer.analyze(code)
-
-    parser = Parser(tokens)
-    ast = parser.parse()
+    tokens = LexicalAnalyzer().analyze(code)
+    ast = Parser(tokens).parse()
     print("Análise sintática concluída com sucesso!")
 
-    analisador_semantico = SemanticAnalyzer()
-    analisador_semantico.analisar(ast)
+    semantic_analyzer = SemanticAnalyzer()
+    semantic_analyzer.analisar(ast)
     print("Análise semântica concluída com sucesso!")
 
-    gerar_ast(ast)
+    output_dir = ROOT / "saida"
+    output_dir.mkdir(exist_ok=True)
+    base_name = file_path.stem
+    source_c = output_dir / f"{base_name}.c"
+    executable = output_dir / (
+        f"{base_name}.exe" if sys.platform == "win32" else base_name
+    )
+
+    if generate_ast:
+        gerar_ast(ast, arquivo=str(output_dir / f"{base_name}_ast.html"), abrir=False)
+        print(f"AST gerada em: {output_dir / f'{base_name}_ast.html'}")
 
     print("\nTabela de símbolos:")
-    tabela = analisador_semantico.gerar_tabela_simbolos()
-    for item in tabela:
-        print(f"Nome: {item['nome']}, Tipo: {item['tipo']}, Categoria: {item['categoria']}, Escopo: {item['escopo']}")
+    for item in semantic_analyzer.gerar_tabela_simbolos():
+        print(
+            f"Nome: {item['nome']}, Tipo: {item['tipo']}, "
+            f"Categoria: {item['categoria']}, Escopo: {item['escopo']}"
+        )
 
-    codigo_c = CCodeGenerator().generate(ast)
-    with open("saida/codigo_gerado.c", "w", encoding="utf-8") as arquivo:
-        arquivo.write(codigo_c)
-    print("\nCódigo C gerado em: saida/codigo_gerado.c")
+    source_c.write_text(CCodeGenerator().generate(ast), encoding="utf-8")
+    print(f"\nCódigo C gerado em: {source_c}")
 
-except SyntaxError as erro:
-    print(f"Erro léxico: {erro}")
-except ParserError as erro:
-    print(erro)
-except SemanticError as erro:
-    print(erro)
+    command = compiler_command(source_c, executable)
+    try:
+        result = subprocess.run(
+            command,
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+    except FileNotFoundError as error:
+        raise RuntimeError(
+            "GCC não foi encontrado. Instale o GCC e deixe-o disponível no PATH."
+        ) from error
+
+    if result.returncode != 0:
+        details = result.stderr.strip() or result.stdout.strip()
+        raise RuntimeError(f"falha ao compilar o código C:\n{details}")
+
+    print(f"Compilação concluída: {executable}")
+    if run:
+        print("\nExecução do programa:")
+        completed = subprocess.run([str(executable)], cwd=ROOT, check=False)
+        if completed.returncode != 0:
+            raise RuntimeError(
+                f"o programa terminou com código {completed.returncode}."
+            )
+
+    return source_c, executable
+
+
+def main():
+    arguments = parse_arguments()
+    try:
+        compile_file(arguments.arquivo, arguments.run, arguments.ast)
+    except (OSError, SyntaxError, ParserError, SemanticError, ValueError, RuntimeError) as error:
+        print(f"Erro: {error}", file=sys.stderr)
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

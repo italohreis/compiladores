@@ -239,10 +239,10 @@ class CCodeGenerator:
         tipo = self._inferir_tipo(no.valor)
         expressao = self._gerar_expressao(no.valor)
         if tipo == "string":
-            return f'{self._indent()}printf("%s", {expressao});'
+            return f'{self._indent()}printf("%s\\n", {expressao});'
         if tipo == "bool":
-            return f'{self._indent()}printf("%s", {expressao} ? "true" : "false");'
-        return f'{self._indent()}printf("%d", {expressao});'
+            return f'{self._indent()}printf("%s\\n", {expressao} ? "true" : "false");'
+        return f'{self._indent()}printf("%d\\n", {expressao});'
 
     def _gerar_expressao(self, no):
         if isinstance(no, Numero):

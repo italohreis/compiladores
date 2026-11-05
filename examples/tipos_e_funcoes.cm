@@ -1,0 +1,14 @@
+int soma(int a, int b) {
+    return a + b;
+}
+
+bool maior_ou_igual(int a, int b) {
+    return a >= b;
+}
+
+int primeiro = 7;
+int segundo = 5;
+bool resultado = maior_ou_igual(primeiro, segundo);
+
+print(soma(primeiro, segundo));
+print(resultado);

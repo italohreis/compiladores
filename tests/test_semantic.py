@@ -132,7 +132,7 @@ class TestAnalisadorSemantico(unittest.TestCase):
         self.assertIn("int dobro(int n);", gerado)
         self.assertIn("return ((n * 2) + x);", gerado)
         self.assertIn("x = 3;", gerado)
-        self.assertIn("printf(\"%d\", dobro(x));", gerado)
+        self.assertIn("printf(\"%d\\n\", dobro(x));", gerado)
         self.assertIn("int main(void)", gerado)
 
 
