@@ -6,24 +6,12 @@ int fatorial(int n) {
     }
 }
 
-int x = 10;
-bool ativo = true;
+int numero;
 
-scan(x);
+print("Digite um numero para calcular o fatorial: ");
+scan(numero);
 
-if (ativo && x >= 10) {
-    x = fatorial(x);
-    print("Valor atualizado");
-} else {
-    print("Condicao falsa");
-}
+int resultado = fatorial(numero);
 
-while (x < 20) {
-    x = x + 1;
-}
-
-for (x = 0; x < 3; x = x + 1) {
-    print(x);
-}
-
-print(fatorial(x));
+print("Resultado do fatorial: ");
+print(resultado);

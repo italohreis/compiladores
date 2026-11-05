@@ -2,7 +2,7 @@ int soma(int a, int b) {
     return a + b;
 }
 
-int idade = 20;
+int idade = 16;
 bool maior = idade >= 18;
 
 if (maior) {
