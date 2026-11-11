@@ -18,11 +18,10 @@ python main.py examples\fatorial.cm --run
 ```
 
 O programa `fatorial.cm` solicita um número pelo teclado. Os demais exemplos
-demonstram estruturas de controle, tipos, funções, recursão e escopos:
+demonstram estruturas de controle, tipos, funções, recursão...
 
 - `examples\controle.cm`
 - `examples\tipos_e_funcoes.cm`
-- `examples\escopos.cm`
 
 Para gerar também a visualização HTML da AST:
 
