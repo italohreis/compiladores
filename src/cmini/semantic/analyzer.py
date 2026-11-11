@@ -129,13 +129,16 @@ class SemanticAnalyzer:
             "funcao",
             "global",
             getattr(funcao, "linha", None),
-            parametros=[parametro.tipo for parametro in funcao.parametros],
+            parametros=[
+                f"{parametro.nome}: {parametro.tipo}"
+                for parametro in funcao.parametros
+            ],
         )
 
     def _escopo_atual(self):
         return self.escopos[-1]
 
-    def _declarar_variavel(self, nome, tipo, no=None):
+    def _declarar_variavel(self, nome, tipo, no=None, categoria="variavel"):
         if tipo not in self.TIPOS:
             self._erro(f"tipo '{tipo}' inválido para a variável '{nome}'.", no)
         if nome in self._escopo_atual():
@@ -146,7 +149,7 @@ class SemanticAnalyzer:
         self.tabela_simbolos.registrar(
             nome,
             tipo,
-            "variavel",
+            categoria,
             self._escopo_nome_atual(),
             getattr(no, "linha", None),
         )
@@ -175,7 +178,12 @@ class SemanticAnalyzer:
         self.escopos.append({})  # Parâmetros e variáveis do corpo compartilham escopo.
         try:
             for parametro in funcao.parametros:
-                self._declarar_variavel(parametro.nome, parametro.tipo, parametro)
+                self._declarar_variavel(
+                    parametro.nome,
+                    parametro.tipo,
+                    parametro,
+                    categoria="parametro",
+                )
             self._analisar_bloco(funcao.corpo, criar_escopo=False)
             if not self._retorna_em_todos_os_caminhos(funcao.corpo):
                 self._erro(

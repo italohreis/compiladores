@@ -113,8 +113,10 @@ class TestAnalisadorSemantico(unittest.TestCase):
         tabela = analise.gerar_tabela_simbolos()
 
         self.assertTrue(any(item["nome"] == "soma" and item["categoria"] == "funcao" for item in tabela))
-        self.assertTrue(any(item["nome"] == "a" and item["categoria"] == "variavel" and item["escopo"] == "soma" for item in tabela))
+        self.assertTrue(any(item["nome"] == "a" and item["categoria"] == "parametro" and item["escopo"] == "soma" for item in tabela))
         self.assertTrue(any(item["nome"] == "total" and item["categoria"] == "variavel" and item["escopo"] == "soma" for item in tabela))
+        funcao = next(item for item in tabela if item["nome"] == "soma")
+        self.assertEqual(funcao["parametros"], ["a: int", "b: int"])
 
     def test_geracao_de_codigo_c(self):
         codigo = """

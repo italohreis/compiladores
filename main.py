@@ -76,10 +76,17 @@ def compile_file(file_path, run=False, generate_ast=False):
         print(f"AST gerada em: {output_dir / f'{base_name}_ast.html'}")
 
     print("\nTabela de símbolos:")
+    print(
+        f"{'Nome':<18} {'Tipo':<10} {'Categoria':<12} "
+        f"{'Escopo':<18} {'Linha':<8} Parâmetros"
+    )
+    print("-" * 90)
     for item in semantic_analyzer.gerar_tabela_simbolos():
+        parametros = ", ".join(item.get("parametros", []))
         print(
-            f"Nome: {item['nome']}, Tipo: {item['tipo']}, "
-            f"Categoria: {item['categoria']}, Escopo: {item['escopo']}"
+            f"{item['nome']:<18} {item['tipo']:<10} "
+            f"{item['categoria']:<12} {item['escopo']:<18} "
+            f"{str(item['linha'] or '-'): <8} {parametros}"
         )
 
     source_c.write_text(CCodeGenerator().generate(ast), encoding="utf-8")
